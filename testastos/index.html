@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="container">
+        <h3>Please type minutes number below</h3>
+        <a class="dropdown-item" onclick="set_time('10')" href="#">10min</a>
+        <a class="dropdown-item" onclick="set_time('20')" href="#">20min</a>
+        <a class="dropdown-item" onclick="set_time('30')" href="#">30min</a>
+        <a class="dropdown-item" onclick="set_time('60')" href="#">1H</a>
+        <a class="dropdown-item" onclick="set_time('120')" href="#">2H</a>
+        <a class="dropdown-item" onclick="set_time('180')" href="#">3H</a>
+        <div id="inputArea">
+
+            <h1 id="timer">0:00</h1>
+        </div>
+        <h1 id="time">0:00</h1>
+    </div>
+    <script>
+            var temps_recup = 0;
+        function set_time(temps) {
+            if (temps === '10') {
+                document.getElementById("timer").innerHTML = 10;
+
+            }
+            else if (temps === '20') {
+                document.getElementById("timer").innerHTML = 20;
+
+            }
+            else if (temps === '30') {
+                document.getElementById("timer").innerHTML = 30;
+
+            } else if (temps === '60') {
+                document.getElementById("timer").innerHTML = 60;
+
+            } else if (temps === '120') {
+                document.getElementById("timer").innerHTML = 120;
+
+            } else if (temps === '180') {
+                document.getElementById("timer").innerHTML = 180;
+
+            }
+            temps_recup=temps;
+        }
+        //global var
+        var secondsRemaining;
+        var intervalHandle;
+
+        function resetPage() {
+            document.getElementById("inputArea").style.display = "block";
+        }
+
+        function tick() {
+            //get h1
+            timeDisplay = document.getElementById("time");
+            //seconds to m:s
+            var min = Math.floor(secondsRemaining / 60);
+            var sec = secondsRemaining - (min * 60);
+            //leading 0 when <10
+            if (sec < 10) {
+                sec = "0" + sec;
+            }
+            var message = min + ":" + sec;
+            timeDisplay.innerHTML = message;
+            //stop if 0
+            if (secondsRemaining === 0) {
+                alert("done");
+                clearInterval(intervalHandle);
+                resetPage();
+            }
+            secondsRemaining--;
+        }
+
+        function startCountdown() {
+            //get input value
+            var minutes = document.getElementById("minutes").value = temps_recup    ;
+            //check number
+            if (isNaN(minutes)) {
+                alert("Please type a number!");
+                return;
+            }
+            //seconds
+            secondsRemaining = minutes * 60;
+            intervalHandle = setInterval(tick, 1000);
+            //hide input
+            document.getElementById("inputArea").style.display = "none";
+        }
+
+        window.onload = function () {
+            //create text box
+            var inputMinutes = document.createElement("input");
+            inputMinutes.setAttribute("id", "minutes");
+            inputMinutes.setAttribute("type", "text");
+            //create button
+            var startButton = document.createElement("input");
+            startButton.setAttribute("id", "button");
+            startButton.setAttribute("type", "button");
+            startButton.setAttribute("value", "Start countdown");
+            startButton.onclick = function () {
+                startCountdown();
+            }
+            //inset to div
+            document.getElementById("inputArea").appendChild(inputMinutes);
+            document.getElementById("inputArea").appendChild(startButton);
+        }
+    </script>
+</body>
+
+</html>
